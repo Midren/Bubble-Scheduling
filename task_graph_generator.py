@@ -1,6 +1,6 @@
-class Node:
-    def __init__(self, ind, comp)
-        self.index = ind
-        self.computation = comp
-        
 with open("dag.txt") as f:
+    graph = dict()
+    for line in f.readlines():
+        if(not line.startswith("NODE ")):
+            continue
+        print(line.split())
