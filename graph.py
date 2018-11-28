@@ -35,15 +35,11 @@ class Graph:
             nodes.remove(min_n)
             cur_weight = visited[min_n]
             for edge in self.get_children(min_n):
-                print(edge, edge[0], edge[1])
                 weight = cur_weight + edge[0].computation + edge[1]
-                print("weight = ", weight)
                 if edge[0] not in visited or weight < visited[edge[0]]:
                     visited[edge[0]] = weight
                     path[edge[0]] = min_n
         return path
-
-
 
 
 class Node:

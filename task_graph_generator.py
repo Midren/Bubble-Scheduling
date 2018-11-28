@@ -29,5 +29,3 @@ with open("dag.txt") as f:
                 graph.inc_dct[nd].append((node_lst[ind[0]], ind[1]))
                 graph.inc_dct[nd].remove(ind)
     graph.inc_dct[node_lst[-1]] = []
-
-    print(graph)
