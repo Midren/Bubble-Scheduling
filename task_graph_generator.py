@@ -1,13 +1,15 @@
 from graph import Node, Graph
+import os, sys
+
 
 def get_graph(filename):
     graph = Graph()
     with open(filename) as f:
         lines = f.readlines()
         end = int((lines[-1]).split()[1])
-        node_lst = [None for i in range(end+1)]
+        node_lst = [None for i in range(end + 1)]
         for line in lines[:-1]:
-            if(not line.startswith("NODE ")):
+            if (not line.startswith("NODE ")):
                 continue
             line = line.split()
             if line[3] == 'ROOT' or line[3] == 'COMPUTATION':
@@ -31,3 +33,8 @@ def get_graph(filename):
                     graph.inc_dct[nd].remove(ind)
         graph.inc_dct[node_lst[-1]] = []
     return graph
+
+
+def generate_graph_txt():
+    os.system("./daggen -n 25 -o dag.txt")
+    return get_graph('dag.txt')
