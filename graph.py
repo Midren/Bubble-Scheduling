@@ -55,7 +55,6 @@ class Graph:
         return path
 
     def find_cpn_list(self):
-        # Test
         fst, lst = None, None
         for i in self.get_nodes():
             if i.index == 0:
@@ -64,8 +63,7 @@ class Graph:
                 lst = i
             if fst is not None and lst is not None:
                 break
-        # This don't work now -- Yura fix pls
-        path = self.dijkstra(self, fst)
+        path = self.dijkstra(fst)
         last_item = self.get_nodes()[-1]
         cpn_list = [last_item]
         while last_item != fst:
@@ -74,13 +72,12 @@ class Graph:
         return cpn_list
 
     def find_ibn_list(self):
-        # Test
         cpn = self.find_cpn_list()
         ibn = []
         for node in self.get_nodes():
             children = self.get_children_nodes(node)
             for nd in cpn:
-                if nd in children:
+                if nd in children and node not in cpn:
                     ibn.append(node)
             else:
                 continue

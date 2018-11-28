@@ -33,4 +33,4 @@ def get_graph(filename):
     return graph
 
 graph = get_graph("dag.txt")
-print(graph.topological_sort())
+print(graph.find_ibn_list())
