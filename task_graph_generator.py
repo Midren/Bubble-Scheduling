@@ -31,6 +31,3 @@ def get_graph(filename):
                     graph.inc_dct[nd].remove(ind)
         graph.inc_dct[node_lst[-1]] = []
     return graph
-
-graph = get_graph("dag.txt")
-print(graph.find_ibn_list())
