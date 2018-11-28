@@ -54,35 +54,40 @@ class Graph:
                     path[edge[0]] = min_n
         return path
 
-    def find_cpn_list(self):
-        fst, lst = None, None
-        for i in self.get_nodes():
-            if i.index == 0:
-                fst = i
-            elif len(self.inc_dct[i]) == 0:
-                lst = i
-            if fst is not None and lst is not None:
-                break
+    def get_cpn_list(self):
+        fst, lst = self.get_nodes()[0], self.get_nodes()[1]
         path = self.dijkstra(fst)
         last_item = self.get_nodes()[-1]
         cpn_list = [last_item]
         while last_item != fst:
             last_item = path[last_item]
             cpn_list.append(last_item)
-        return cpn_list
+        return cpn_list[::-1]
 
-    def find_ibn_list(self):
-        cpn = self.find_cpn_list()
+    def get_ibn_list(self):
+        cpn = self.get_cpn_list()
         ibn = []
+
+        def check_ibn(graph, node, cpn):
+            for nd in graph.get_children_nodes(node):
+                if nd in cpn:
+                    return True
+                if check_ibn(graph, nd, cpn):
+                    return True
+            return False
+
         for node in self.get_nodes():
-            children = self.get_children_nodes(node)
-            for nd in cpn:
-                if nd in children and node not in cpn:
-                    ibn.append(node)
-            else:
-                continue
-            break
+            if node not in cpn and check_ibn(self, node, cpn):
+                ibn.append(node)
+
         return ibn
+
+    def get_obn_set(self):
+        nodes = set(self.get_nodes())
+        nodes -= set(self.get_cpn_list())
+        nodes -= set(self.get_ibn_list())
+        return list(nodes)
+
 
     def topological_sort(self):
         visited = defaultdict(bool)
