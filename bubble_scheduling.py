@@ -1,4 +1,5 @@
 from graph import Graph, Node
+from visual import visualize
 from task_graph_generator import get_graph
 
 def cpn_first_ordering(graph):
@@ -47,5 +48,6 @@ def bsa(graph):
     pass
 
 if __name__ == "__main__":
-    graph = get_graph("dag(2).txt")
+    graph = get_graph("example.txt")
+    visualize(graph)
     print(cpn_first_ordering(graph))

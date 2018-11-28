@@ -110,12 +110,13 @@ class Graph:
 
 
 class Node:
-    def __init__(self, ind, comp):
+    def __init__(self, ind, comp, trans):
         self.index = ind
         self.computation = comp
+        self.tranfering = trans
 
     def __repr__(self):
-        return "Node( " + str(self.index) + ", " + str(self.computation) + " )"
+        return "Node( " + str(self.index) + ", " + str(self.computation) + ', ' + str(self.tranfering) + " )"
 
     def __cmp__(self, other):
         if self.index == other.index and self.computation == other.computation:
