@@ -1,5 +1,6 @@
 from collections import defaultdict
 
+
 class Graph:
     def __init__(self):
         # dict with indicidence lists
@@ -44,10 +45,10 @@ class Graph:
             nodes.remove(min_n)
             cur_weight = visited[min_n]
             for edge in self.get_children(min_n):
-                    weight = cur_weight + edge[0].computation + edge[1]
-                    if edge[0] not in visited or weight < visited[edge[0]]:
-                        visited[edge[0]] = weight
-                        path[edge[0]] = min_n
+                weight = cur_weight + edge[0].computation + edge[1]
+                if edge[0] not in visited or weight < visited[edge[0]]:
+                    visited[edge[0]] = weight
+                    path[edge[0]] = min_n
         return path
 
     def find_cpn_list(self):
@@ -61,8 +62,13 @@ class Graph:
             if fst is not None and lst is not None:
                 break
         # This don't work now -- Yura fix pls
-        cp = self.dijkstra(self, fst)[lst]
-        return cp
+        path = self.dijkstra(self, fst)
+        last_item = self.get_nodes()[-1]
+        cpn_list = [last_item]
+        while last_item != fst:
+            last_item = path[last_item]
+            cpn_list.append(last_item)
+        return cpn_list
 
     def find_ibn_list(self):
         # Test
@@ -105,7 +111,7 @@ class Node:
         self.computation = comp
 
     def __repr__(self):
-        return "Node( " + str(self.index) +", " + str(self.computation) + " )"
+        return "Node( " + str(self.index) + ", " + str(self.computation) + " )"
 
     def __cmp__(self, other):
         if self.index == other.index and self.computation == other.computation:
