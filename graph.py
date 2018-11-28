@@ -16,11 +16,14 @@ class Graph:
         """Returns children of the given vertice`s"""
         return self.inc_dct[node]
 
+    def get_children_nodes(self, node):
+        """Returns children of the given vertice`s"""
+        return list(map(lambda x: x[0], self.get_children(node)))
+
     def get_parents(self, node):
-        # Test
         parents = []
         for nd in self.get_nodes():
-            if node in self.get_children(nd):
+            if node in self.get_children_nodes(nd):
                 parents.append(nd)
         return parents
 
@@ -69,7 +72,7 @@ class Graph:
         cpn = self.find_cpn_list()
         ibn = []
         for node in self.get_nodes():
-            children = self.get_children(node)
+            children = self.get_children_nodes(node)
             for nd in cpn:
                 if nd in children:
                     ibn.append(node)
@@ -79,14 +82,13 @@ class Graph:
         return ibn
 
     def topological_sort(self):
-        # Test
         visited = defaultdict(bool)
         nodes = []
 
         def topological_sort_util(self, v, visited, nodes):
             visited[v] = True
 
-            for i in self.get_children(v):
+            for i in self.get_children_nodes(v):
                 if visited[i] == False:
                     topological_sort_util(self, i, visited, nodes)
 
