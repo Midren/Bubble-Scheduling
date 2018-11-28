@@ -28,5 +28,5 @@ with open("dag.txt") as f:
             if isinstance(ind[0], int):
                 graph.inc_dct[nd].append((node_lst[ind[0]], ind[1]))
                 graph.inc_dct[nd].remove(ind)
-
-    print(graph)
+    a = list(graph.inc_dct.keys())[0]
+    c, b = graph.dijkstra(a)

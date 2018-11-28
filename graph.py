@@ -9,11 +9,11 @@ class Graph:
 
     def get_nodes(self):
         """Returns set of vertices(keys of the dict)"""
-        pass
+        return list(self.inc_dct.keys())
 
-    def children(self, node):
+    def get_children(self, node):
         """Returns children of the given vertice`s"""
-
+        return self.inc_dct[node]
 
     def dijkstra(self, start):
         visited = {start: 0}
@@ -31,14 +31,17 @@ class Graph:
                         min_n = node
             if min_n is None:
                 break
+
             nodes.remove(min_n)
             cur_weight = visited[min_n]
-            for transfer in self.children(min_n):
-                weight = cur_weight + transfer.computation + min_n.computation
-                if transfer not in visited or weight < visited[transfer.get_children[-1]]:
-                    visited[transfer.children[-1]] = weight
-                    path[transfer.children[-1]] = min_n
-        return visited, path
+            for edge in self.get_children(min_n):
+                print(edge, edge[0], edge[1])
+                weight = cur_weight + edge[0].computation + edge[1]
+                print("weight = ", weight)
+                if edge[0] not in visited or weight < visited[edge[0]]:
+                    visited[edge[0]] = weight
+                    path[edge[0]] = min_n
+        return path
 
 
 
@@ -51,6 +54,7 @@ class Node:
     def __repr__(self):
         return "Node( " + str(self.index) +", " + str(self.computation) + " )"
 
-    def get_children(self):
-        """DOGADAySYA :=)"""
-        pass
+    def __cmp__(self, other):
+        if self.index == other.index and self.computation == other.computation:
+            return True
+        return False
