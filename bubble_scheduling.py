@@ -1,6 +1,7 @@
 from graph import Graph, Node
 from visual import visualize
 from task_graph_generator import get_graph
+from processor_graph import *
 
 def cpn_first_ordering(graph):
     seq = []
@@ -44,9 +45,11 @@ def cpn_first_ordering(graph):
     return seq
 
 
-def bsa(graph):
-    pass
+def bsa(graph, processor_graph):
+    print(cpn_first_ordering(graph))
+    print(processor_graph.bfs(1))
 
 if __name__ == "__main__":
     graph = get_graph("dag.txt")
-    print(cpn_first_ordering(graph))
+    processor_graph = ProcessorsGraph({1:{2, 3}, 2:{1, 4}, 3:{1, 4}, 4:{2, 3}})
+    bsa(graph, processor_graph)

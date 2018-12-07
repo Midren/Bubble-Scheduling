@@ -15,10 +15,6 @@ class ProcessorsGraph:
                 queue.extend(self.inc_dct[vertex] - visited)
         return visited
 
-class Processor:
-    def __init__(self):
-        self.tasks = []
-
 class Tasks:
     def __init__(self, tasks, graph, pivot_pe):
         self.graph = graph
@@ -119,6 +115,3 @@ class Task(Node):
         self.dat = 0
         self.proc = None
         self.parents = []
-
-a = ProcessorsGraph({1:{2, 3}, 2:{1, 4}, 3:{1, 4}, 4:{2, 3}})
-print(a.bfs(1))
