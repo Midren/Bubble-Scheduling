@@ -7,12 +7,13 @@ class ProcessorsGraph:
         self.inc_dct = my_dict
 
     def bfs(self, start):
-        visited, queue = set(), [start]
+        visited, queue = list(), [start]
         while queue:
             vertex = queue.pop(0)
-            if vertex is not visited:
-                visited.add(vertex)
-                queue.extend(self.inc_dct[vertex] - visited)
+            print(visited, vertex)
+            if vertex not in visited:
+                visited.append(vertex)
+                queue.extend([element for element in self.inc_dct[vertex] if element not in visited])
         return visited
 
     def max_degree_node(self):

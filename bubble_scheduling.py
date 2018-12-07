@@ -53,5 +53,5 @@ def bsa(graph, processor_graph):
 
 if __name__ == "__main__":
     graph = get_graph("dag.txt")
-    processor_graph = ProcessorsGraph({1:{2, 3}, 2:{1, 4}, 3:{1, 4}, 4:{2, 3}})
+    processor_graph = ProcessorsGraph({1:[2, 3], 2:[1, 4], 3:[1, 4], 4:[2, 3]})
     bsa(graph, processor_graph)
