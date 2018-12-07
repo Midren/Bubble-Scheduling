@@ -28,6 +28,12 @@ class Graph:
                 parents.append(nd)
         return parents
 
+    def get_edge(self, nd1, nd2):
+        # Test this pls
+        for nd in self.inc_dct[nd1]:
+            if nd[0] == nd2:
+                return nd[1]
+
     def dijkstra(self, start):
         visited = {start: 0}
         path = dict()

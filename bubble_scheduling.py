@@ -48,6 +48,5 @@ def bsa(graph):
     pass
 
 if __name__ == "__main__":
-    graph = get_graph("example.txt")
-    visualize(graph)
+    graph = get_graph("dag.txt")
     print(cpn_first_ordering(graph))
