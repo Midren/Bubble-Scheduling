@@ -28,6 +28,24 @@ class Graph:
                 parents.append(nd)
         return parents
 
+    def get_graph_algo(self, proc_a):
+        n_vertex = len(self.inc_dct.keys())
+        n_edges = sum([len(i) for i in self.inc_dct.values()])
+        inc_lst = list()
+        for k, v in self.inc_dct.items():
+            for inc_v in v:
+                inc_lst.append((k.index, inc_v[0].index))
+
+        with open('dag_v2.txt', 'w') as f:
+            f.write(str(n_vertex) + ' ')
+            f.write(str(n_edges) + ' ')
+            f.write(str(proc_a))
+            f.write('\n')
+            for i in inc_lst:
+                f.write(str(i[0]) + ' ')
+                f.write(str(i[1]) + ' ')
+                f.write('\n')
+
     def dijkstra(self, start):
         visited = {start: 0}
         path = dict()

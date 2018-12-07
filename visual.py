@@ -18,4 +18,5 @@ def visualize(graph):
 
 if __name__ == "__main__":
     graph = generate_graph_txt()
+    graph.get_graph_algo(4)
     visualize(graph)
