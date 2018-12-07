@@ -46,8 +46,10 @@ def cpn_first_ordering(graph):
 
 
 def bsa(graph, processor_graph):
+    pivot_pe = processor_graph.max_degree_node()
+    processor_list = processor_graph.bfs(pivot_pe)
     print(cpn_first_ordering(graph))
-    print(processor_graph.bfs(1))
+
 
 if __name__ == "__main__":
     graph = get_graph("dag.txt")

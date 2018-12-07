@@ -15,6 +15,15 @@ class ProcessorsGraph:
                 queue.extend(self.inc_dct[vertex] - visited)
         return visited
 
+    def max_degree_node(self):
+        node = None
+        for i in self.inc_dct.keys():
+            if node is None:
+                node = i
+            elif len(self.inc_dct[i]) > len(self.inc_dct[node]):
+                node = i
+        return i
+
 class Tasks:
     def __init__(self, tasks, graph, pivot_pe):
         self.graph = graph
