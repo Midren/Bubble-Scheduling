@@ -3,6 +3,8 @@ from visual import visualize
 from task_graph_generator import get_graph
 from processor_graph import *
 
+from pprint import pprint
+
 def cpn_first_ordering(graph):
     seq = []
     seq_set = set()
@@ -48,10 +50,26 @@ def cpn_first_ordering(graph):
 def bsa(graph, processor_graph):
     pivot_pe = processor_graph.max_degree_node()
     processor_list = processor_graph.bfs(pivot_pe)
-    print(cpn_first_ordering(graph))
-
+    tasks = list(map(Task, cpn_first_ordering(graph)))
+    tasks = Tasks(tasks, graph, pivot_pe)
+    while processor_list:
+        pivot_pe = processor_list[0]
+        for task in tasks.tasks[pivot_pe]:
+            if task.st > task.dat or (tasks.vip(task) is not None and tasks.vip(task).proc != pivot_pe):
+                for proc in processor_list[1:]:
+                    if tasks.st_if_migrate(task, proc) < task.st:
+                        tasks.migrate(task, proc)
+                        break
+                else:
+                    continue
+                for proc in processor_list[1:]:
+                    if tasks.st_if_migrate(task, proc) >= task.st and (tasks.vip(task) is not None and tasks.vip(task).proc == pivot_pe):
+                        tasks.migrate(task, proc)
+                        break
+        processor_list = processor_list[1:]
+    pprint(tasks.tasks)
 
 if __name__ == "__main__":
     graph = get_graph("dag.txt")
-    processor_graph = ProcessorsGraph({1:[2, 3], 2:[1, 4], 3:[1, 4], 4:[2, 3]})
+    processor_graph = ProcessorsGraph({1:[2, 3, 4], 2:[1, 3, 4], 3:[1, 2, 4], 4:[1, 2, 3]})
     bsa(graph, processor_graph)

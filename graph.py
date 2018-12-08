@@ -139,7 +139,7 @@ class Node:
         self.tranfering = trans
 
     def __repr__(self):
-        return "Node( " + str(self.index) + ", " + str(self.computation) + ', ' + str(self.tranfering) + " )"
+        return self.__class__.__name__ + "( " + str(self.index) + ", " + str(self.computation) + ', ' + str(self.tranfering) + " )"
 
     def __cmp__(self, other):
         if self.index == other.index and self.computation == other.computation:
