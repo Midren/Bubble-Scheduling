@@ -60,7 +60,7 @@ def bsa(graph, processor_graph):
             if task.st >= task.dat or ((tasks.vip(task) is not None) and (tasks.vip(task).proc != pivot_pe)):
 
                 for proc in processor_list[1:]:
-                    if tasks.st_if_migrate(task, proc) < task.st:
+                    if tasks.st_if_migrate(task, proc) <= task.st:
                         tasks.migrate(task, proc)
                         break
             else:
@@ -74,16 +74,18 @@ def bsa(graph, processor_graph):
     return tasks
 
 if __name__ == "__main__":
-    graph = get_graph("example.txt")
+    graph = get_graph("dag(2).txt")
     processor_graph = ProcessorsGraph({1:[2, 3, 4], 2:[1, 3, 4], 3:[1, 2, 4], 4:[1, 2, 3]})
 
     tasks = bsa(graph, processor_graph)
-    work_time = max([tasks.tasks[proc][-1].fn for proc in tasks.tasks])
-    print("Work time using parallel architecture:", work_time)
-
-    processor_list = processor_graph.bfs(1)
-    tasks_node = cpn_first_ordering(graph)
-    tasks = list(map(Task, tasks_node))
-    tasks = Tasks(tasks, tasks_node, graph, 1)
-    work_time = max([tasks.tasks[proc][-1].fn for proc in tasks.tasks])
-    print("Work time using one processor:", work_time)
+    pprint(tasks.tasks)
+    # tasks = bsa(graph, processor_graph)
+    # work_time = max([tasks.tasks[proc][-1].fn for proc in tasks.tasks])
+    # print("Work time using parallel architecture:", work_time)
+    #
+    # processor_list = processor_graph.bfs(1)
+    # tasks_node = cpn_first_ordering(graph)
+    # tasks = list(map(Task, tasks_node))
+    # tasks = Tasks(tasks, tasks_node, graph, 1)
+    # work_time = max([tasks.tasks[proc][-1].fn for proc in tasks.tasks])
+    # print("Work time using one processor:", work_time)
