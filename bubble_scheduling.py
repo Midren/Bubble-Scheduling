@@ -56,38 +56,34 @@ def bsa(graph, processor_graph):
 
     while processor_list:
         pivot_pe = processor_list[0]
-        # pprint(tasks.tasks)
-        # pprint(tasks.links)
-        print("*****")
-        for task in tasks.tasks[pivot_pe]:
-            # print(task, tasks.vip(task))
-            # print(task.st, task.dat)
-            # print()
-            if task.st > task.dat or ((tasks.vip(task) is not None) and (tasks.vip(task).proc != pivot_pe)):
+        for task in tasks.tasks[pivot_pe][:]:
+            if task.st >= task.dat or ((tasks.vip(task) is not None) and (tasks.vip(task).proc != pivot_pe)):
 
                 for proc in processor_list[1:]:
-                    # print(tasks.st_if_migrate(task, proc), task.st, task)
                     if tasks.st_if_migrate(task, proc) < task.st:
                         tasks.migrate(task, proc)
                         break
             else:
-
                 for proc in processor_list[1:]:
                     a = tasks.st_if_migrate(task, proc) >= task.st
                     b = (tasks.vip(task) is not None and tasks.vip(task).proc == pivot_pe)
                     if a and b:
                         tasks.migrate(task, proc)
                         break
-        print("*****")
-        # pprint(tasks.tasks)
-        # pprint(tasks.links)
-        # for proc in tasks.tasks:
-        #     for tsk in tasks.tasks[proc]:
-        #         print(tsk, tsk.st, tsk.fn, tsk.dat)
         processor_list = processor_list[1:]
-    pprint(tasks.tasks)
+    return tasks
 
 if __name__ == "__main__":
-    graph = get_graph("dag.txt")
+    graph = get_graph("example.txt")
     processor_graph = ProcessorsGraph({1:[2, 3, 4], 2:[1, 3, 4], 3:[1, 2, 4], 4:[1, 2, 3]})
-    bsa(graph, processor_graph)
+
+    tasks = bsa(graph, processor_graph)
+    work_time = max([tasks.tasks[proc][-1].fn for proc in tasks.tasks])
+    print("Work time using parallel architecture:", work_time)
+
+    processor_list = processor_graph.bfs(1)
+    tasks_node = cpn_first_ordering(graph)
+    tasks = list(map(Task, tasks_node))
+    tasks = Tasks(tasks, tasks_node, graph, 1)
+    work_time = max([tasks.tasks[proc][-1].fn for proc in tasks.tasks])
+    print("Work time using one processor:", work_time)

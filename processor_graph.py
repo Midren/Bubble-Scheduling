@@ -98,6 +98,7 @@ class Tasks:
             message = Message(parent, task, self.comm_dict[(parent.index, task.index)])
             if len(self.links[message.parent.proc]) <= 1:
                 self.links[message.parent.proc].append(message)
+                task.communication += message.communication
             else:
                 for num, m in enumerate(self.links[message.parent.proc][1:]):
                     new_st = max(self.links[message.parent.proc][1 + num-1].fn, message.parent.fn)
