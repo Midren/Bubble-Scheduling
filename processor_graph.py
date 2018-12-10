@@ -52,7 +52,7 @@ class Tasks:
 
     def st_if_migrate_comp(self, task, proc):
         if not self.tasks[proc]:
-            return 0
+            return task.computation
         for num, t in enumerate(self.tasks[proc][1:]):
             new_st = max(self.tasks[proc][1 + num-1].fn, task.dat)
             if (t.st - new_st >= task.computation): # and new_st < task.st:
@@ -61,9 +61,9 @@ class Tasks:
 
     def st_if_migrate_comm(self, message, proc):
         if not self.links[message.parent.proc]:
-            return 0
+            return self.comm_dict[(message.parent.index, message.child.index)]
         for num, m in enumerate(self.links[message.parent.proc][1:]):
-            new_st = max(self.links[message.parent.proc][1 + num-1].fn, message.parent.fn)
+            new_st = max(self.links[m.child.proc][1 + num-1].fn, m.child.fn)
             if (m.st - new_st >= message.communication):
                 return new_st
         return self.links[message.parent.proc][len(self.links[message.parent.proc])-1].fn
@@ -109,12 +109,13 @@ class Tasks:
     def update(self, proc, pivot_pe):
         for msg in self.links[pivot_pe]:
             msg.child.dat += self.comm_dict[(msg.parent.index, msg.child.index)]
+
         for proc in [pivot_pe, proc]:
             # pprint(self.tasks)
             for num, task in enumerate(self.tasks[proc][1:]):
                 # for t in graph.get_parents(task):
                 # task.dat = max(task.dat, t.fn)# + graph.get_edge(t, task))
-                task.st = max(self.tasks[proc][1+num-1].fn, task.dat)
+                task.st = max(self.tasks[proc][1 + num - 1].fn, task.dat)
                 task.fn = task.st + task.computation
             # pprint(self.tasks)
 
@@ -140,6 +141,6 @@ class Task(Node):
         super().__init__(node.index, node.computation, node.tranfering)
         self.st = 0
         self.fn = self.computation
-        self.dat = -1
+        self.dat = 0
         self.proc = None
         self.parents = []

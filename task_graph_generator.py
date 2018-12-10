@@ -38,7 +38,3 @@ def get_graph(filename):
 def generate_graph_txt():
     os.system("./daggen -n 5 -o dag.txt")
     return get_graph('dag.txt')
-
-a = generate_graph_txt()
-pprint(a.get_nodes())
-a.get_graph_algo(3)

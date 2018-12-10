@@ -63,20 +63,24 @@ def bsa(graph, processor_graph):
             # print(task, tasks.vip(task))
             # print(task.st, task.dat)
             # print()
-            if task.st >= task.dat or (tasks.vip(task) is not None and tasks.vip(task).proc != pivot_pe):
+            if task.st > task.dat or ((tasks.vip(task) is not None) and (tasks.vip(task).proc != pivot_pe)):
+
                 for proc in processor_list[1:]:
                     # print(tasks.st_if_migrate(task, proc), task.st, task)
                     if tasks.st_if_migrate(task, proc) < task.st:
                         tasks.migrate(task, proc)
                         break
-                else:
-                    continue
+            else:
+
                 for proc in processor_list[1:]:
-                    if tasks.st_if_migrate(task, proc) >= task.st and (tasks.vip(task) is not None and tasks.vip(task).proc == pivot_pe):
+                    a = tasks.st_if_migrate(task, proc) >= task.st
+                    b = (tasks.vip(task) is not None and tasks.vip(task).proc == pivot_pe)
+                    print(a,b)
+                    if a and b:
                         tasks.migrate(task, proc)
                         break
         print("*****")
-        # pprint(tasks.tasks)
+        pprint(tasks.tasks)
         pprint(tasks.links)
         # for proc in tasks.tasks:
         #     for tsk in tasks.tasks[proc]:
