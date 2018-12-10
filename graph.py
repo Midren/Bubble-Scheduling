@@ -1,5 +1,5 @@
 from collections import defaultdict
-
+from pprint import pprint
 
 class Graph:
     def __init__(self):
@@ -34,22 +34,22 @@ class Graph:
                 return nd[1]
 
     def get_graph_algo(self, proc_a):
-        n_vertex = len(self.inc_dct.keys())
+        n_vertex = len(self.get_nodes())
         n_edges = sum([len(i) for i in self.inc_dct.values()])
-        inc_lst = list()
-        for k, v in self.inc_dct.items():
-            for inc_v in v:
-                inc_lst.append((k.index, inc_v[0].index))
 
+        line_1 = str(n_vertex) + str(proc_a)
+        lst_1 = ['{} '.format(i.computation) * 3 for i in self.inc_dct.keys()]
+        lst_2 = [[-1 for _ in range(n_vertex)] for l in range(n_vertex)]
+        for num, i in enumerate(self.get_nodes()):
+            for inc_v in self.inc_dct[i]:
+                lst_2[num][self.get_nodes().index(inc_v[0])] = inc_v[1]
         with open('dag_v2.txt', 'w') as f:
-            f.write(str(n_vertex) + ' ')
-            f.write(str(n_edges) + ' ')
-            f.write(str(proc_a))
-            f.write('\n')
-            for i in inc_lst:
-                f.write(str(i[0]) + ' ')
-                f.write(str(i[1]) + ' ')
-                f.write('\n')
+            f.write(line_1 + '\n ')
+            for i in lst_1: f.write(i + '\n')
+            for j in lst_2:
+                # f.write(' '.join([str(i) for i in j]) + '\n')
+                a = [str(i) for i in j]
+                f.write(' '.join(a) + '\n')
 
     def dijkstra(self, start):
         visited = {start: 0}
@@ -111,7 +111,6 @@ class Graph:
         nodes -= set(self.get_ibn_list())
         return list(nodes)
 
-
     def topological_sort(self):
         visited = defaultdict(bool)
         nodes = []
@@ -139,10 +138,10 @@ class Node:
         self.tranfering = trans
 
     def __repr__(self):
-        return self.__class__.__name__ + "( " + str(self.index) + ", " + str(self.computation) + ', ' + str(self.tranfering) + " )"
+        return "Node( " + str(self.index) + ", " + str(
+            self.computation) + ', ' + str(self.tranfering) + " )"
 
     def __cmp__(self, other):
-        print(self, other)
         if self.index == other.index and self.computation == other.computation:
             return True
         return False
