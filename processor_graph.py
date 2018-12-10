@@ -102,22 +102,17 @@ class Tasks:
                     new_st = max(self.links[message.parent.proc][1 + num-1].fn, message.parent.fn)
                     if (m.st - new_st >= message.communication):
                         self.links[message.parent.proc].insert(num, message)
+                        task.communication += message.communication
                         break
         self.update(pivot_pe, proc)
 
 
     def update(self, proc, pivot_pe):
-        for msg in self.links[pivot_pe]:
-            msg.child.dat += self.comm_dict[(msg.parent.index, msg.child.index)]
-
         for proc in [pivot_pe, proc]:
-            # pprint(self.tasks)
             for num, task in enumerate(self.tasks[proc][1:]):
-                # for t in graph.get_parents(task):
-                # task.dat = max(task.dat, t.fn)# + graph.get_edge(t, task))
+                task.dat = self.vip(task).fn + task.communication
                 task.st = max(self.tasks[proc][1 + num - 1].fn, task.dat)
                 task.fn = task.st + task.computation
-            # pprint(self.tasks)
 
     def vip(self, task):
         if task.parents:
@@ -144,3 +139,4 @@ class Task(Node):
         self.dat = 0
         self.proc = None
         self.parents = []
+        self.communication = 0
