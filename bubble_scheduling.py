@@ -50,13 +50,22 @@ def cpn_first_ordering(graph):
 def bsa(graph, processor_graph):
     pivot_pe = processor_graph.max_degree_node()
     processor_list = processor_graph.bfs(pivot_pe)
-    tasks = list(map(Task, cpn_first_ordering(graph)))
-    tasks = Tasks(tasks, graph, pivot_pe)
+    tasks_node = cpn_first_ordering(graph)
+    tasks = list(map(Task, tasks_node))
+    tasks = Tasks(tasks, tasks_node, graph, pivot_pe)
+
     while processor_list:
         pivot_pe = processor_list[0]
+        # pprint(tasks.tasks)
+        # pprint(tasks.links)
+        print("*****")
         for task in tasks.tasks[pivot_pe]:
-            if task.st > task.dat or (tasks.vip(task) is not None and tasks.vip(task).proc != pivot_pe):
+            # print(task, tasks.vip(task))
+            # print(task.st, task.dat)
+            # print()
+            if task.st >= task.dat or (tasks.vip(task) is not None and tasks.vip(task).proc != pivot_pe):
                 for proc in processor_list[1:]:
+                    # print(tasks.st_if_migrate(task, proc), task.st, task)
                     if tasks.st_if_migrate(task, proc) < task.st:
                         tasks.migrate(task, proc)
                         break
@@ -66,6 +75,13 @@ def bsa(graph, processor_graph):
                     if tasks.st_if_migrate(task, proc) >= task.st and (tasks.vip(task) is not None and tasks.vip(task).proc == pivot_pe):
                         tasks.migrate(task, proc)
                         break
+        print("*****")
+        # pprint(tasks.tasks)
+        pprint(tasks.links)
+        # for proc in tasks.tasks:
+        #     for tsk in tasks.tasks[proc]:
+        #         print(tsk, tsk.st, tsk.fn, tsk.dat)
+        # break
         processor_list = processor_list[1:]
     pprint(tasks.tasks)
 

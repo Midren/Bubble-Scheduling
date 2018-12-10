@@ -142,6 +142,7 @@ class Node:
         return self.__class__.__name__ + "( " + str(self.index) + ", " + str(self.computation) + ', ' + str(self.tranfering) + " )"
 
     def __cmp__(self, other):
+        print(self, other)
         if self.index == other.index and self.computation == other.computation:
             return True
         return False
