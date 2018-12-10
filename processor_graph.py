@@ -62,8 +62,8 @@ class Tasks:
     def st_if_migrate_comm(self, message, proc):
         if not self.links[message.parent.proc]:
             return self.comm_dict[(message.parent.index, message.child.index)]
-        for num, m in enumerate(self.links[message.parent.proc][1:]):
-            new_st = max(self.links[m.child.proc][1 + num-1].fn, m.child.fn)
+        for num, m in enumerate(self.links[message.child.proc][1:]):
+            new_st = max(self.links[message.child.proc][1 + num-1].fn, m.child.fn)
             if (m.st - new_st >= message.communication):
                 return new_st
         return self.links[message.parent.proc][len(self.links[message.parent.proc])-1].fn
@@ -79,7 +79,7 @@ class Tasks:
 
     def migrate(self, task, proc):
         pivot_pe = task.proc
-        if not self.tasks[proc]:
+        if len(self.tasks[proc]) <= 1:
                 self.tasks[proc].append(task)
                 self.tasks[task.proc].remove(task)
                 task.proc = proc
@@ -92,10 +92,11 @@ class Tasks:
                     task.proc = proc
                     break
 
+
         if task.parents:
             parent = self.vip(task)
             message = Message(parent, task, self.comm_dict[(parent.index, task.index)])
-            if not self.links[message.parent.proc]:
+            if len(self.links[message.parent.proc]) <= 1:
                 self.links[message.parent.proc].append(message)
             else:
                 for num, m in enumerate(self.links[message.parent.proc][1:]):
@@ -109,6 +110,9 @@ class Tasks:
 
     def update(self, proc, pivot_pe):
         for proc in [pivot_pe, proc]:
+            self.tasks[proc][0].dat = self.tasks[proc][0].communication
+            self.tasks[proc][0].st = max(self.tasks[proc][0].dat, 0)
+            self.tasks[proc][0].fn = self.tasks[proc][0].st + self.tasks[proc][0].computation
             for num, task in enumerate(self.tasks[proc][1:]):
                 task.dat = self.vip(task).fn + task.communication
                 task.st = max(self.tasks[proc][1 + num - 1].fn, task.dat)
