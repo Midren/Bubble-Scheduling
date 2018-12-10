@@ -3,7 +3,6 @@ from pprint import pprint
 
 class Graph:
     def __init__(self):
-        # dict with indicidence lists
         self.inc_dct = defaultdict(list)
 
     def __repr__(self):
@@ -47,7 +46,6 @@ class Graph:
             f.write(line_1 + '\n ')
             for i in lst_1: f.write(i + '\n')
             for j in lst_2:
-                # f.write(' '.join([str(i) for i in j]) + '\n')
                 a = [str(i) for i in j]
                 f.write(' '.join(a) + '\n')
 
